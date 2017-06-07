@@ -18,7 +18,21 @@ const byte CATHODE_PINS[8] = {2, 3, 4, 5,      // Outside
                               6, 7, 8, 9};     // Inside
 
 const byte AXIS_PIN = A0;
-const byte VELOCITY_PIN = A1;
+const byte LOCATION_PIN = A1;
+
+const int POT_MAX = 1024;
+
+enum Axis {
+  X,
+  Y,
+  Z
+};
+Axis axis;
+
+byte ledPattern[4][4][4]; // 1 for on, 0 for off
+byte x;
+byte y;
+byte z;
 
 void setup()
 {
@@ -38,7 +52,7 @@ void setup()
   }
 
   pinMode(AXIS_PIN, INPUT);
-  pinMode(VELOCITY_PIN, INPUT);
+  pinMode(LOCATION_PIN, INPUT);
 
   // Initialize serial communication
   // (to be read by Serial Monitor on your computer).
@@ -147,21 +161,43 @@ void display(byte pattern[4][4][4], byte brightness)
 
 void loop()
 {
-  static byte ledPattern[4][4][4]; // 1 for on, 0 for off
+  
+  Serial.print("AXIS PIN READING: ");
+  Serial.println(analogRead(AXIS_PIN));
+  
+  // Read axis.
+  int axisRead = analogRead(AXIS_PIN);
+  if (axisRead <= POT_MAX / 3) {
+    axis = X;
+    
+    Serial.println("X");
+    
+  } else if (axisRead <= 2 * POT_MAX / 3) {
+    axis = Y;
+    
+    Serial.println("Y");
+    
+  } else {
+    axis = Z;
+    
+    Serial.println("Z");
+  }
+  
+  
+  Serial.print("LOC PIN READING: ");
+  Serial.println(analogRead(LOCATION_PIN));
 
-  // byte x = 0;
-  // byte y = 0;
-  // byte z = 0;
+  // Read location.
+  int locationRead = analogRead(LOCATION_PIN);
+  int location = locationRead / (POT_MAX / 4);
+  
+  Serial.println(location);
+  Serial.println();
 
   // Toggle the LED state.
-  ledPattern[z][y][x] = !ledPattern[z][y][x];
+  // ledPattern[z][y][x] = !ledPattern[z][y][x];
 
   // This function gets called every loop.
   display(ledPattern, 16);
-
-  Serial.print("AXIS PIN READING: ");
-  Serial.println(analogRead(AXIS_PIN));
-  Serial.print("VEL PIN READING: ");
-  Serial.println(analogRead(VELOCITY_PIN));
 }
 
