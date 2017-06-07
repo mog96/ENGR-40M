@@ -27,7 +27,9 @@ enum Axis {
   Y,
   Z
 };
+
 Axis axis;
+Axis previousAxis;
 
 byte ledPattern[4][4][4]; // 1 for on, 0 for off
 byte x;
@@ -166,23 +168,20 @@ void loop()
   Serial.println(analogRead(AXIS_PIN));
   
   // Read axis.
+  previousAxis = axis;
   int axisRead = analogRead(AXIS_PIN);
   if (axisRead <= POT_MAX / 3) {
     axis = X;
-    
     Serial.println("X");
     
   } else if (axisRead <= 2 * POT_MAX / 3) {
     axis = Y;
-    
     Serial.println("Y");
     
   } else {
     axis = Z;
-    
     Serial.println("Z");
   }
-  
   
   Serial.print("LOC PIN READING: ");
   Serial.println(analogRead(LOCATION_PIN));
@@ -193,6 +192,51 @@ void loop()
   
   Serial.println(location);
   Serial.println();
+
+  // Shift `location` to reflect current axis.
+  if (axis != previousAxis) {
+    
+    Serial.println("SWITCH AXIS");
+    Serial.print("OLD LOC: ");
+    Serial.println(location);
+    
+    switch (axis) {
+    case X:
+      location = x;
+      break;
+    case Y:
+      location = y;
+      break;
+    case Z:
+      location = z;
+      break;
+    }
+
+    Serial.print("NEW LOC: ");
+    Serial.println(location);
+  }
+
+  switch (axis) {
+  case X:
+    x = location;
+    break;
+  case Y:
+    y = location;
+    break;
+  case Z:
+    z = location;
+    break;
+  }
+
+  Serial.print("X: ");
+  Serial.println(x);
+  Serial.print("Y: ");
+  Serial.println(y);
+  Serial.print("Z: ");
+  Serial.println(z);
+  Serial.println();
+
+  ledPattern[z][y][x] = 1;
 
   // Toggle the LED state.
   // ledPattern[z][y][x] = !ledPattern[z][y][x];
