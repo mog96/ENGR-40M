@@ -36,6 +36,9 @@ byte x;
 byte y;
 byte z;
 
+int locationRead;
+int previousLocationRead;
+
 void setup()
 {
   // Make all of the anode (+) wire and cathode (-) wire pins outputs.
@@ -187,7 +190,8 @@ void loop()
   Serial.println(analogRead(LOCATION_PIN));
 
   // Read location.
-  int locationRead = analogRead(LOCATION_PIN);
+  previousLocationRead = locationRead;
+  locationRead = analogRead(LOCATION_PIN);
   int location = locationRead / (POT_MAX / 4);
   
   Serial.println(location);
@@ -236,7 +240,10 @@ void loop()
   Serial.println(z);
   Serial.println();
 
-  ledPattern[z][y][x] = 1;
+  // Only update LEDs once location pot is moved.
+  if (locationRead != previousLocationRead) {
+    ledPattern[z][y][x] = 1;
+  }
 
   // Toggle the LED state.
   // ledPattern[z][y][x] = !ledPattern[z][y][x];
