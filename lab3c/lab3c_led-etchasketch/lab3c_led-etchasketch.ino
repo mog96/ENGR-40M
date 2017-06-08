@@ -197,39 +197,21 @@ void loop()
   Serial.println(location);
   Serial.println();
 
-//  // Shift `location` to reflect current axis.
-//  if (axis != previousAxis) {
-//    
-//    Serial.println("SWITCH AXIS");
-//    Serial.print("OLD LOC: ");
-//    Serial.println(location);
-//    
-//    switch (axis) {
-//    case X:
-//      location = x;
-//      break;
-//    case Y:
-//      location = y;
-//      break;
-//    case Z:
-//      location = z;
-//      break;
-//    }
-//
-//    Serial.print("NEW LOC: ");
-//    Serial.println(location);
-//  }
-
-  switch (axis) {
-  case X:
-    x = location;
-    break;
-  case Y:
-    y = location;
-    break;
-  case Z:
-    z = location;
-    break;
+  // Only update LEDs once location pot is moved.
+  if (abs(locationRead - previousLocationRead) > 5) {
+    switch (axis) {
+    case X:
+      x = location;
+      break;
+    case Y:
+      y = location;
+      break;
+    case Z:
+      z = location;
+      break;
+    }
+    
+    ledPattern[z][y][x] = 1;
   }
 
   Serial.print("X: ");
@@ -239,11 +221,6 @@ void loop()
   Serial.print("Z: ");
   Serial.println(z);
   Serial.println();
-
-  // Only update LEDs once location pot is moved.
-  if (locationRead != previousLocationRead) {
-    ledPattern[z][y][x] = 1;
-  }
 
   // Toggle the LED state.
   // ledPattern[z][y][x] = !ledPattern[z][y][x];
