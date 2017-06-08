@@ -197,28 +197,28 @@ void loop()
   Serial.println(location);
   Serial.println();
 
-  // Shift `location` to reflect current axis.
-  if (axis != previousAxis) {
-    
-    Serial.println("SWITCH AXIS");
-    Serial.print("OLD LOC: ");
-    Serial.println(location);
-    
-    switch (axis) {
-    case X:
-      location = x;
-      break;
-    case Y:
-      location = y;
-      break;
-    case Z:
-      location = z;
-      break;
-    }
-
-    Serial.print("NEW LOC: ");
-    Serial.println(location);
-  }
+//  // Shift `location` to reflect current axis.
+//  if (axis != previousAxis) {
+//    
+//    Serial.println("SWITCH AXIS");
+//    Serial.print("OLD LOC: ");
+//    Serial.println(location);
+//    
+//    switch (axis) {
+//    case X:
+//      location = x;
+//      break;
+//    case Y:
+//      location = y;
+//      break;
+//    case Z:
+//      location = z;
+//      break;
+//    }
+//
+//    Serial.print("NEW LOC: ");
+//    Serial.println(location);
+//  }
 
   switch (axis) {
   case X:
