@@ -5,7 +5,7 @@
  * the line to travel in the forward or backward direction.
  *
  * ENGR 40M
- * May 2017
+ * June 2017
  */
 
 // Arrays of pin numbers. Fill these in with the pins to which you connected
@@ -221,9 +221,6 @@ void loop()
   Serial.print("Z: ");
   Serial.println(z);
   Serial.println();
-
-  // Toggle the LED state.
-  // ledPattern[z][y][x] = !ledPattern[z][y][x];
 
   // This function gets called every loop.
   display(ledPattern, 16);
